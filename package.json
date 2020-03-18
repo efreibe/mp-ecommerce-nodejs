@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "URL=http://localhost:3000 nodemon app.js",
+    "env": "heroku config:set URL=https://sos-contador-mp-ecommerce.herokuapp.com"
   },
   "author": "",
   "license": "ISC",

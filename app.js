@@ -75,7 +75,7 @@ app.get('/comprar', (req, res) => res.render('comprar', {
   title: req.query.title,
   price: req.query.price,
   unit: req.query.unit,
-  img_url: `${req.protocol}://${req.get('host')}${req.query.img.substr(1)}`,
+  img_url: tools.generateFullUrl(req.query.img.substr(2)),
 }))
 
 app.post('/confirmar', async (req, res) => {
@@ -91,5 +91,9 @@ app.post('/procesar-pago', async (req, res) => {
   const payment_id = pago.body.id
   res.render('procesado', { payment_method_id, total_paid_amount, order_id, payment_id, ...req.body })
 })
+
+app.post('/callback', (req, res) => res.send('OK'))
+
+console.log(`Store URL= ${process.env.URL}`)
 
 app.listen(process.env.PORT || 3000)
