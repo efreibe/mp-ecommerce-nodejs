@@ -18,8 +18,25 @@
     </div>
   </div>
 
-  <form action="/procesar-pago" method="POST" style="text-align: center;padding:60px;">
-    <script src="https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js"
+  <style>
+    .box {
+      width: 50%;
+      margin: 40px auto;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .pagar {
+      border: 1px solid blue;
+      background-color: lightskyblue;
+    }
+  </style>
+
+  <div class="box pagar">
+    <div>Todo listo, pulsá el botón para hacer el pago</div>
+  </div>
+  <form action="/procesar-pago" method="POST" style="text-align: center; padding:20px;">
+    <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js" data-elements-color="#2D3277"
       data-preference-id="{{ prefId }}" data-button-label="Pagar la compra">
       </script>
   </form>

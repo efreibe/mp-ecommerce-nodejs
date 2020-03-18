@@ -121,5 +121,4 @@ tarjetas de prueba de Mercado Pago:
 ```
 
 ### Tarjetas de Testeo
-https://www.mercadopago.com.ar/developers/es/guides/payments/web-payment-checkout/te
-st-integration/
+https://www.mercadopago.com.ar/developers/es/guides/payments/web-payment-checkout/test-integration/

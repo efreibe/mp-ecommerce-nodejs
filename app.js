@@ -17,9 +17,9 @@
  * Tarjetas de prueba
  * -------------------------------------------------------------------------------------------------------------
  * Tarjeta	            Número	                CVV	    Fecha de vencimiento
- * Mastercard	        5031 7557 3453 0604	    123	    11/25
+ * Mastercard	          5031 7557 3453 0604	    123	    11/25
  * Visa	                4170 0688 1010 8020	    123	    11/25
- * American Express	    3711 8030 3257 522	    1234	11/25
+ * American Express	    3711 8030 3257 522	    1234	  11/25
  *
  *
  * Para probar distintos resultados de pago, completa el dato que quieras en el nombre del titular de la tarjeta
@@ -41,7 +41,14 @@ const exphbs  = require('express-handlebars')
 const tools = require('./lib/tools')
 const mp = require('./lib/mp')
 
-const hbs = exphbs.create()
+const hbs = exphbs.create({
+  helpers: {
+    ifthen: (v1, v2, options) => {
+      if(v1 == v2) return options.fn(this)
+      return options.inverse(this)
+    }
+  }
+})
 
 const app = express()
 
@@ -74,6 +81,15 @@ app.get('/comprar', (req, res) => res.render('comprar', {
 app.post('/confirmar', async (req, res) => {
   const preferencia = await tools.generarPreferencia(req)
   res.render('confirmar', { prefId: preferencia.id })
+})
+
+app.post('/procesar-pago', async (req, res) => {
+  const pago = await tools.getPaymentData(req.body.payment_id)
+  const payment_method_id = pago.body.payment_method_id
+  const total_paid_amount = pago.body.transaction_details.total_paid_amount
+  const order_id = pago.body.order.id
+  const payment_id = pago.body.id
+  res.render('procesado', { payment_method_id, total_paid_amount, order_id, payment_id, ...req.body })
 })
 
 app.listen(process.env.PORT || 3000)
