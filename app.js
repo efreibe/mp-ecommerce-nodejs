@@ -34,24 +34,46 @@
  * FORM: Rechazado por error en formulario.
  */
 
-const express = require('express');
-const exphbs  = require('express-handlebars');
+const express = require('express')
+const bodyParser = require('body-parser')
+const exphbs  = require('express-handlebars')
 
-const app = express();
+const tools = require('./lib/tools')
+const mp = require('./lib/mp')
 
-app.engine('handlebars', exphbs());
-app.set('view engine', 'handlebars');
+const hbs = exphbs.create()
 
-app.get('/', function (req, res) {
-    res.render('home');
-});
+const app = express()
 
-app.get('/detail', function (req, res) {
-    res.render('detail', req.query);
-});
+mp.init()
 
-app.use(express.static('assets'));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.static('assets'))
+app.use('/assets', express.static(__dirname + '/assets'))
 
-app.use('/assets', express.static(__dirname + '/assets'));
+app.engine('handlebars', hbs.engine)
+app.set('view engine', 'handlebars')
 
-app.listen(process.env.PORT);
+app.get('/', (_, res) => res.render('home'))
+
+app.get('/detail', async (req, res) => res.render('detail', {
+  img: req.query.img,
+  title: req.query.title,
+  price: req.query.price,
+  unit: req.query.unit,
+}))
+
+app.get('/comprar', (req, res) => res.render('comprar', {
+  img: req.query.img,
+  title: req.query.title,
+  price: req.query.price,
+  unit: req.query.unit,
+  img_url: `${req.protocol}://${req.get('host')}${req.query.img.substr(1)}`,
+}))
+
+app.post('/confirmar', async (req, res) => {
+  const preferencia = await tools.generarPreferencia(req)
+  res.render('confirmar', { prefId: preferencia.id })
+})
+
+app.listen(process.env.PORT || 3000)
