@@ -63,7 +63,7 @@
   {{#ifthen payment_status 'cancelled' }}
   <div class="box error">
     <div>El pago fue cancelado</div>
-    <div>{{ payment_status_detail }}</div>
+    <div>{{ @root.payment_status_detail }}</div>
   </div>
   <button type="button" onclick="window.history.back()" class="mercadopago-button">Intentar Nuevamente</button>
   {{/ifthen}}
@@ -71,7 +71,7 @@
   {{#ifthen payment_status 'rejected' }}
   <div class="box error">
     <div>Error al completar el pago</div>
-    <div>{{ payment_status_detail }}</div>
+    <div>{{ @root.payment_status_detail }}</div>
   </div>
   <button type="button" onclick="window.history.back()" class="mercadopago-button">Intentar Nuevamente</button>
   {{/ifthen}}
